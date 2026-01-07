@@ -21,6 +21,12 @@
         <p>Applied At: {{ $application->applied_at }}</p>
         <p>Last Activity At: {{ $application->last_activity_at }}</p>
         <a href="/applications/{{ $application->id }}/edit">Edit</a>
+        <form action="{{ route('applications.followUp', $application->id) }}", method="POST">
+            @csrf
+            @method('PATCH')
+            <p>Follow Up At:</p>
+            <input type="date" name='follow_up_at' onchange='this.form.submit()'>
+        </form>
         <form action="{{ route('applications.destroy', $application->id) }}" method="POST">
             @csrf
             @method('DELETE')

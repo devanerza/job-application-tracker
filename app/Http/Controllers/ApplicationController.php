@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ApplicationController extends Controller
 {
@@ -86,8 +87,42 @@ class ApplicationController extends Controller
 
         $application->status = $validated['status'];
         $application->last_activity_at = now();
+
+        if ($application->status == 'offer' || 'rejected' || 'ghosted') {
+            $application->follow_up_at = null;
+        }
+
         $application->save();
 
         return redirect()->route('applications.index')->with('success', 'Application status updated successfully.');
+    }
+    
+    public function followUp(Request $request, Application $application)
+    {
+        if ($application->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'follow_up_at' => 'nullable|date'
+        ]);
+
+        $followUpAt = Carbon::parse($validated['follow_up_at']);
+        $present = Carbon::now();
+
+        if ($followUpAt < $present) {
+            abort(403, 'follow up must be in the future');
+        }
+
+        $application->follow_up_at = $validated['follow_up_at'];
+        $application->last_activity_at = now();
+
+        if ($application->status == 'offer' || 'rejected' || 'ghosted') {
+            $application->follow_up_at = null;
+        }
+
+        $application->save();
+
+        return redirect()->route('applications.index')->with('success', 'Application follow up updated successfully.');
     }
 }
