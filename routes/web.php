@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/applications', [ApplicationController::class, 'store'])->name('applications.store');
     Route::delete('/applications/{application}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
     Route::put('/applications/{application}', [ApplicationController::class, 'update'])->name('applications.update');
+    Route::match(['PATCH', 'PUT'], '/applications/{application}/status', [ApplicationController::class, 'statusUpdate'])->name('applications.statusUpdate');
 });
 
 require __DIR__.'/auth.php';

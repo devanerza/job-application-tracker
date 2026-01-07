@@ -74,4 +74,20 @@ class ApplicationController extends Controller
         return redirect()->route('applications.index')->with('success', 'Application updated successfully.');
     }
     
+    public function statusUpdate(Request $request, Application $application)
+    {
+        if ($application->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:applied,screening,interviewing,offer,rejected,ghosted',
+        ]);
+
+        $application->status = $validated['status'];
+        $application->last_activity_at = now();
+        $application->save();
+
+        return redirect()->route('applications.index')->with('success', 'Application status updated successfully.');
+    }
 }
