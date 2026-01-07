@@ -7,5 +7,10 @@
         <strong>Status: {{ $application->status }}</strong>
         <p>Applied At: {{ $application->applied_at }}</p>
         <p>Last Activity At: {{ $application->last_activity_at }}</p>
+        <a href="/applications/{{ $application->id }}/edit">Edit</a>
+        <form action="{{ route('applications.destroy', $application->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit">Delete</button>
     </div>
 @endforeach

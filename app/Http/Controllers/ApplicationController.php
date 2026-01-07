@@ -18,6 +18,12 @@ class ApplicationController extends Controller
         return view('applications.create');
     }
 
+    public function edit($id)
+    {
+        $application = Application::findOrFail($id);
+        return view('applications.edit', compact('application'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -35,4 +41,37 @@ class ApplicationController extends Controller
 
         return redirect()->route('applications.index')->with('success', 'Application created successfully.');
     }
+
+    public function destroy(Application $application)
+    {
+        if ($application->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $application->delete();
+
+        return redirect()->route('applications.index')->with('success', 'Application deleted successfully.');
+    }
+
+    public function update(Request $request, Application $application)
+    {
+        if ($application->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'role_title' => 'required|string|max:255',
+            'job_url' => 'nullable|url|max:255',
+            'status' => 'required|in:applied,screening,interviewing,offer,rejected,ghosted',
+            'applied_at' => 'required|date',
+        ]);
+
+        $application->update($validated);
+        $application->last_activity_at = $validated['applied_at'];
+        $application->save();
+
+        return redirect()->route('applications.index')->with('success', 'Application updated successfully.');
+    }
+    
 }
