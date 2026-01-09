@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Application extends Model
@@ -16,6 +18,14 @@ class Application extends Model
         'status',
         'applied_at',
     ];
+
+    #[Scope]
+    protected function filter(Builder $query): void
+    {
+        $query->when($filters['status'] ?? null, function ($query, $status){
+            $query->where('status', $status);
+        });
+    }   
     
     public function user()
     {
