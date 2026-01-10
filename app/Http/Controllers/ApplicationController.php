@@ -8,9 +8,12 @@ use Carbon\Carbon;
 
 class ApplicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $applications = Application::where('user_id', auth()->id())->latest()->get();
+        $applications = Application::where('user_id', auth()->id())
+        ->filter($request->all()) 
+        ->paginate(10)
+        ->withQueryString();
         return view('applications.index', compact('applications'));
     }
 
@@ -37,7 +40,7 @@ class ApplicationController extends Controller
 
         $application = new Application($validated);
         $application->user_id = auth()->id();
-        $application->last_activity_at = $validated['applied_at'];
+        $application->last_activity_at = now();
         $application->save();
 
         return redirect()->route('applications.index')->with('success', 'Application created successfully.');
@@ -88,7 +91,7 @@ class ApplicationController extends Controller
         $application->status = $validated['status'];
         $application->last_activity_at = now();
 
-        if ($application->status == 'offer' || 'rejected' || 'ghosted') {
+        if ($application->status == 'offer' || $application->status == 'rejected' || $application->status == 'ghosted') {
             $application->follow_up_at = null;
         }
 
@@ -102,6 +105,7 @@ class ApplicationController extends Controller
         if ($application->user_id !== auth()->id()) {
             abort(403);
         }
+
 
         $validated = $request->validate([
             'follow_up_at' => 'nullable|date'
@@ -123,6 +127,8 @@ class ApplicationController extends Controller
         
 
         $application->save();
+
+        // dd($application->status);
 
         return redirect()->route('applications.index')->with('success', 'Application follow up updated successfully.');
     }

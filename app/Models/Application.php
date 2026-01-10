@@ -20,11 +20,20 @@ class Application extends Model
     ];
 
     #[Scope]
-    protected function filter(Builder $query): void
+    protected function filter(Builder $query, array $filters): void
     {
         $query->when($filters['status'] ?? null, function ($query, $status){
             $query->where('status', $status);
         });
+
+        $sort = $filters['sort'] ?? 'follow_up_at';
+        $direction = $filters['direction'] ?? 'desc';
+        
+        $allowedSorts = ['last_activity_at', 'follow_up_at', 'applied_at'];
+
+        if (in_array($sort, $allowedSorts)) {
+            $query->orderBy($sort, $direction);
+        }
     }   
     
     public function user()
