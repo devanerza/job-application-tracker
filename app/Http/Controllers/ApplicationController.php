@@ -117,9 +117,10 @@ class ApplicationController extends Controller
         $application->follow_up_at = $validated['follow_up_at'];
         $application->last_activity_at = now();
 
-        if ($application->status == 'offer' || 'rejected' || 'ghosted') {
+        if ($application->status == 'offer' || $application->status == 'rejected' || $application->status == 'ghosted') {
             $application->follow_up_at = null;
         }
+        
 
         $application->save();
 
