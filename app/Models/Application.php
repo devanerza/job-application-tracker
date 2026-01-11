@@ -26,7 +26,7 @@ class Application extends Model
             $query->where('status', $status);
         });
 
-        $sort = $filters['sort'] ?? 'follow_up_at';
+        $sort = $filters['sort'] ?? 'last_activity_at';
         $direction = $filters['direction'] ?? 'desc';
         
         $allowedSorts = ['last_activity_at', 'follow_up_at', 'applied_at'];
