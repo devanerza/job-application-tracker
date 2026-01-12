@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Inertia\Inertia;
 
 class ApplicationController extends Controller
 {
@@ -14,12 +15,16 @@ class ApplicationController extends Controller
         ->filter($request->all()) 
         ->paginate(10)
         ->withQueryString();
-        return view('applications.index', compact('applications'));
+        
+        return Inertia::render('Applications/Index', [
+            'applications' => $applications,
+            'filters' => $request->only(['search', 'status', 'sort', 'direction']) // Pass filters back to keep UI state
+        ]);
     }
 
     public function create()
     {
-        return view('applications.create');
+        return view('applications.create'); //CHANGE TO INERTIA
     }
 
     public function edit($id)
