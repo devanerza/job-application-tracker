@@ -1,7 +1,7 @@
 "use client"
 
 import { router } from "@inertiajs/react";
-import { MoreHorizontal, Edit, Trash } from "lucide-react";
+import { MoreHorizontal, Edit, Trash, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,6 +25,22 @@ export const columns = [
   {
     accessorKey: "job_url",
     header: "URL",
+    cell: ({ row }) => {
+      const application = row.original;
+
+      if (application.job_url == null) return <p className="opacity-30">No Link Provided</p>
+
+      return (
+        <a 
+          href={application.job_url} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="text-blue-600 hover:underline font-medium flex"
+        >
+          View Post <ExternalLink className="ml-1 size-4" />
+        </a>
+      );
+    },
   },
   {
     accessorKey: "status",
