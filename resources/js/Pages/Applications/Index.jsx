@@ -1,4 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import { CreateApplicationDialog } from './Components/dialog-create'
+import { DatePicker } from './Components/date-picker'
 import { Head } from '@inertiajs/react'
 import { columns } from "./Components/columns"
 import { DataTable } from "./Components/data-table"
@@ -32,14 +34,16 @@ export default function Index({ auth, applications }) {
                     <p>Manage and track your active job hunt status</p>
                 </div>
                 <div>
-                    <Dialog>
+                    <CreateApplicationDialog />
+                    {/* <Dialog>
                         <form action="">
                             <DialogTrigger asChild>
                                 <Button>Add new</Button>
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
-                                <DialogTitle>Fill out your application</DialogTitle>
+                                    <DialogTitle>Fill your application details</DialogTitle>
+                                </DialogHeader>
                                 <div id="company-name" className="pt-5">
                                     <Label htmlFor="" >Company Name</Label>
                                     <Input id="company-name-1" name="company name" placeHolder="e.g Microsoft" />
@@ -53,12 +57,16 @@ export default function Index({ auth, applications }) {
                                     <Input id="job-url-1" name="job url" placeHolder="e.g https://www.linkedin.com/jobs/collection/***" />
                                 </div>
                                 <div id="company-name" className="pt-5">
-                                    <Label htmlFor="">Date Applied</Label>
+                                    <Label htmlFor="" className="mr-3">Date Applied</Label>
+                                    <DatePicker />
                                 </div>
-                                </DialogHeader>
+                                <div id="action-btn" className="pt-5 flex justify-end">
+                                    <Button className="mr-2">Add</Button>
+                                    <Button variant="outline">Cancel</Button>
+                                </div>
                             </DialogContent>
                         </form>
-                    </Dialog>
+                    </Dialog> */}
                 </div>
             </header>
 
