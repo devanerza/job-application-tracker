@@ -17,7 +17,7 @@ export function EditApplicationDialog({ application }) {
     const [open, setOpen] = useState(false);
 
     // 1. Initialize the Inertia Form Hook
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, patch, processing, errors, reset } = useForm({
         company_name: application?.company_name || '',
         role_title: application?.role_title || '',
         job_url: application?.job_url || '',
