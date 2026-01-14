@@ -6,10 +6,7 @@ import { Label } from '@/Components/ui/label'
 import { Input } from '@/Components/ui/input'
 import {
     Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,

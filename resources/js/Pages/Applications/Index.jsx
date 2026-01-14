@@ -1,6 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { CreateApplicationDialog } from './Components/dialog-create'
-import { DatePicker } from './Components/date-picker-apply'
 import { Head } from '@inertiajs/react'
 import { columns } from "./Components/columns"
 import { DataTable } from "./Components/data-table"
