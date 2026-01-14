@@ -1,22 +1,40 @@
 "use client"
 
 import { router } from "@inertiajs/react"
+import { useState } from "react";
 import { format } from "date-fns";
-import { MoreHorizontal, Edit, Trash, ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DatePickerFoll } from "./date-picker-follUp"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { EditApplicationDialog } from "./dialog-edit";
 
 
+// Component for action column
+const ActionCell = ({ application }) => {
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+    return (
+        <div className="flex">
+            <EditApplicationDialog 
+                application={application} 
+                open={isEditDialogOpen} 
+                onOpenChange={setIsEditDialogOpen} 
+            />
+            <Button 
+              variant="outline"
+              className="ml-1 text-red-600"
+              onClick={() => {
+                if(confirm('Delete?')) router.delete(route('applications.destroy', application.id))
+              }}
+            >
+              Delete
+            </Button>
+        </div>
+    );
+};
 
 
+// List of columns 
 export const columns = [
   {
     accessorKey: "company_name", 
@@ -35,6 +53,7 @@ export const columns = [
       if (application.job_url == null) return <p className="opacity-30">No Link Provided</p>
 
       return (
+        
         <a 
           href={application.job_url} 
           target="_blank" 
@@ -51,7 +70,7 @@ export const columns = [
     header: "Status",
     cell: ({ row }) => {
       const application = row.original;
-
+      
       const handleStatusChange = (newStatus) => {
         router.patch(route('applications.statusUpdate', application.id), {
           status: newStatus,
@@ -110,37 +129,6 @@ export const columns = [
   {
     id: "actions",
     header: "Actions",
-    cell: ({ row }) => {
-      const application = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem 
-                onClick={() => router.get(route('applications.edit', application.id))}
-            >
-              <Edit className="mr-2 h-4 w-4" /> Edit
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem 
-                className="text-red-600"
-                onClick={() => {
-                    if(confirm('Are you sure you want to delete this?')) {
-                        router.delete(route('applications.destroy', application.id))
-                    }
-                }}
-            >
-              <Trash className="mr-2 h-4 w-4" /> Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <ActionCell application={row.original} />,
   },
 ];
