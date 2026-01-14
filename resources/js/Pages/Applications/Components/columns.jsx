@@ -1,8 +1,10 @@
 "use client"
 
-import { router } from "@inertiajs/react";
-import { MoreHorizontal, Edit, Trash, ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { router } from "@inertiajs/react"
+import { format } from "date-fns";
+import { MoreHorizontal, Edit, Trash, ExternalLink } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { DatePickerFoll } from "./date-picker-follUp"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +12,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
+
+
 
 
 export const columns = [
@@ -75,7 +79,29 @@ export const columns = [
   },
   {
     accessorKey: "follow_up_at",
-    header: "Next Follow Up"
+    header: "Next Follow Up",
+    cell: ({ row }) => {
+      const application = row.original;
+
+      const handleFollowUp = (date) => {
+        const formattedDate = date ? format(date, "yyyy-MM-dd") : null;
+        router.patch(route('applications.followUp', application.id), {
+          follow_up_at: formattedDate
+          
+        }, {
+          preserveScroll: true
+          
+        }
+      );
+      };
+
+      return (
+        <DatePickerFoll 
+          selected={application.follow_up_at} 
+          onSelect={handleFollowUp} 
+        />
+      );
+    },
   },
   {
     accessorKey: "last_activity_at",
