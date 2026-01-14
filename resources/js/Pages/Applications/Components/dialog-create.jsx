@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
-import { DatePicker } from './date-picker'
+import { DatePicker } from './date-picker-apply'
 import { Button } from '@/Components/ui/button'
 import { Label } from '@/Components/ui/label'
 import { Input } from '@/Components/ui/input'
@@ -33,7 +33,7 @@ export function CreateApplicationDialog() {
         post(route('applications.store'), {
             onSuccess: () => {
                 setOpen(false); // Close dialog on success
-                reset();        // Clear form fields
+                reset();
             },
         });
     };
