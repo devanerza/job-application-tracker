@@ -117,7 +117,7 @@ class ApplicationController extends Controller
         ]);
 
         $followUpAt = Carbon::parse($validated['follow_up_at']);
-        $present = Carbon::now();
+        $present = Carbon::parse($application->applied_at);
 
         if ($followUpAt < $present) {
             abort(403, 'follow up must be in the future');
