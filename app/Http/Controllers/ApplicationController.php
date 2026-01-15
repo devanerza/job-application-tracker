@@ -39,9 +39,11 @@ class ApplicationController extends Controller
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'role_title' => 'required|string|max:255',
-            'job_url' => 'nullable|url|max:255',
+            'job_url' => 'nullable|active_url|max:255',
             'status' => 'required|in:applied,screening,interviewing,offer,rejected,ghosted',
             'applied_at' => 'required|date',
+        ], [
+            'job_url.active_url' => 'invalid or inactive URL'
         ]);
 
         $application = new Application($validated);
@@ -72,9 +74,11 @@ class ApplicationController extends Controller
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'role_title' => 'required|string|max:255',
-            'job_url' => 'nullable|url|max:255',
+            'job_url' => 'nullable|active_url|max:255',
             'status' => 'required|in:applied,screening,interviewing,offer,rejected,ghosted',
             'applied_at' => 'required|date',
+        ],[
+            'job_url.active_url' => 'invalid or inactive URL'
         ]);
 
         $application->update($validated);

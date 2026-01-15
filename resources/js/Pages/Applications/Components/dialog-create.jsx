@@ -79,6 +79,7 @@ export function CreateApplicationDialog() {
                                 onChange={e => setData('job_url', e.target.value)}
                                 placeholder="e.g https://linkedin.com/..." 
                             />
+                            {errors.job_url && <p className="text-red-500 text-xs mt-1">{errors.job_url}</p>}
                         </div>
 
                         <div className="flex flex-col gap-2">
