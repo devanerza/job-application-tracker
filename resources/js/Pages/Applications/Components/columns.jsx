@@ -44,11 +44,21 @@ const FollowUpCell = ({ application }) => {
     );
   };
 
-
+  const isEmpty = (followUpAt) => {
+    if (followUpAt == null) {
+      return (
+        <p className="pt-2 mr-2">N/A</p>
+      )
+    } else {
+      return (
+        <p className="pt-2 mr-2">{followUpAt}</p>
+      )
+    }
+  }
 
   return (
     <div className="flex justify-start">
-      <p className="pt-2 mr-2">{application.follow_up_at}</p>
+      {isEmpty(application.follow_up_at)}
       <DatePickerFoll 
         selected={application.follow_up_at} 
         onSelect={handleFollowUp} 
