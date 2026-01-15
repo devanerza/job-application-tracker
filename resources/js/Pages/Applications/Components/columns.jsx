@@ -33,6 +33,30 @@ const ActionCell = ({ application }) => {
     );
 };
 
+const FollowUpCell = ({ application }) => {
+  const handleFollowUp = (date) => {
+      const formattedDate = date ? format(date, "yyyy-MM-dd") : null;
+      router.patch(route('applications.followUp', application.id), {
+        follow_up_at: formattedDate
+      }, {
+        preserveScroll: true
+      }
+    );
+  };
+
+
+
+  return (
+    <div className="flex justify-start">
+      <p className="pt-2 mr-2">{application.follow_up_at}</p>
+      <DatePickerFoll 
+        selected={application.follow_up_at} 
+        onSelect={handleFollowUp} 
+      />
+    </div>
+  );
+}
+
 
 // List of columns 
 export const columns = [
@@ -99,28 +123,7 @@ export const columns = [
   {
     accessorKey: "follow_up_at",
     header: "Next Follow Up",
-    cell: ({ row }) => {
-      const application = row.original;
-
-      const handleFollowUp = (date) => {
-        const formattedDate = date ? format(date, "yyyy-MM-dd") : null;
-        router.patch(route('applications.followUp', application.id), {
-          follow_up_at: formattedDate
-          
-        }, {
-          preserveScroll: true
-          
-        }
-      );
-      };
-
-      return (
-        <DatePickerFoll 
-          selected={application.follow_up_at} 
-          onSelect={handleFollowUp} 
-        />
-      );
-    },
+    cell: ({ row }) => <FollowUpCell application={row.original} />,
   },
   {
     accessorKey: "last_activity_at",

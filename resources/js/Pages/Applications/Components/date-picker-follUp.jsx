@@ -31,13 +31,13 @@ export function DatePickerFoll({ selected, onSelect }) {
         <Button
           variant="outline"
           className={cn(
-            "w-[240px] justify-start text-left font-normal",
+            " p-3 justify-center text-center font-normal",
             !dateValue && "text-muted-foreground"
           )}
           onClick={() => setOpen(true)}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {dateValue ? format(dateValue, "PPP") : <span>Pick a date</span>}
+          <CalendarIcon className="h-2 w-2" />
+          {/* {dateValue ? format(dateValue, "PPP") : <span>Pick a date</span>} */}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
