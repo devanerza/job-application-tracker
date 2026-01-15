@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 use Inertia\Inertia;
 
@@ -120,7 +121,9 @@ class ApplicationController extends Controller
         $present = Carbon::parse($application->applied_at);
 
         if ($followUpAt < $present) {
-            abort(403, 'follow up must be in the future');
+            throw ValidationException::withMessages([
+                'invalid_follow_up_date' => 'follow up must be in the future!'
+            ])->errorBag("application_{$application->id}");
         }
 
         $application->follow_up_at = $validated['follow_up_at'];

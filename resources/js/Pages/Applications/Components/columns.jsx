@@ -1,6 +1,6 @@
 "use client"
 
-import { router } from "@inertiajs/react"
+import { router, usePage } from "@inertiajs/react"
 import { useState } from "react";
 import { format } from "date-fns";
 import { ExternalLink } from "lucide-react"
@@ -34,6 +34,11 @@ const ActionCell = ({ application }) => {
 };
 
 const FollowUpCell = ({ application }) => {
+  const { errors } = usePage().props;
+
+  const rowError = errors[`application_${application.id}`]?.invalid_follow_up_date;
+
+  // console.log(errors)
   const handleFollowUp = (date) => {
       const formattedDate = date ? format(date, "yyyy-MM-dd") : null;
       router.patch(route('applications.followUp', application.id), {
@@ -44,26 +49,17 @@ const FollowUpCell = ({ application }) => {
     );
   };
 
-  const isEmpty = (followUpAt) => {
-    if (followUpAt == null) {
-      return (
-        <p className="pt-2 mr-2">N/A</p>
-      )
-    } else {
-      return (
-        <p className="pt-2 mr-2">{followUpAt}</p>
-      )
-    }
-  }
-
   return (
-    <div className="flex justify-start">
-      {isEmpty(application.follow_up_at)}
-      <DatePickerFoll 
-        selected={application.follow_up_at} 
-        onSelect={handleFollowUp} 
-      />
-    </div>
+    <>
+      <div>
+        {/* {isEmpty(application.follow_up_at)} */}
+        <DatePickerFoll 
+          selected={application.follow_up_at} 
+          onSelect={handleFollowUp} 
+          err={rowError}
+        />
+      </div>
+    </>
   );
 }
 
