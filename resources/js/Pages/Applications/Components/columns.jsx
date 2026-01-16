@@ -13,10 +13,13 @@ import { EditApplicationDialog } from "./dialog-edit";
 const ActionCell = ({ application }) => {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
+    
+
     return (
         <div className="flex">
             <EditApplicationDialog 
                 application={application} 
+                key={application.id}
                 open={isEditDialogOpen} 
                 onOpenChange={setIsEditDialogOpen} 
             />
