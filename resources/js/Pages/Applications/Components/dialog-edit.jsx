@@ -16,7 +16,7 @@ import {
 export function EditApplicationDialog({ application }) {
     const [open, setOpen] = useState(false);
 
-    // 1. Initialize the Inertia Form Hook
+    // Inertia Form Hook
     const { data, setData, patch, processing, errors, reset } = useForm({
         company_name: application?.company_name || '',
         role_title: application?.role_title || '',
@@ -25,7 +25,9 @@ export function EditApplicationDialog({ application }) {
         status: application?.status || 'applied',
     });
 
-    // 2. Handle Form Submission
+    console.log(data);
+
+    // Form submission handler
     const handleSubmit = (e) => {
         e.preventDefault();
         patch(route('applications.update', application.id), {
