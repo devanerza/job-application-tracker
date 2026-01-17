@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/Components/ui/table"
 
 // Removed TypeScript interfaces and generics
 export function DataTable({ columns, data }) {

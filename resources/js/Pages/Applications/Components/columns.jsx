@@ -4,7 +4,7 @@ import { router, usePage } from "@inertiajs/react"
 import { useState } from "react";
 import { format } from "date-fns";
 import { ExternalLink } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/Components/ui/button"
 import { DatePickerFoll } from "./date-picker-follUp"
 import { EditApplicationDialog } from "./dialog-edit";
 
