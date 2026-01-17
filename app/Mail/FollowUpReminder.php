@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Application;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -27,7 +28,7 @@ class FollowUpReminder extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Follow Up Reminder',
+            subject: 'Application Follow Up Reminder',
         );
     }
 
@@ -38,6 +39,7 @@ class FollowUpReminder extends Mailable
     {
         return new Content(
             view: 'email.follow-up-reminder',
+            with: ['company_name' => $this->application->company_name],
         );
     }
 
