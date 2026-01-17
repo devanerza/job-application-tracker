@@ -16,7 +16,17 @@ class ApplicationController extends Controller
         ->filterSort($request->all()) 
         ->paginate(10)
         ->withQueryString();
-        
+
+        $currentTime = Carbon::now();
+        $dateOnly = $currentTime->toDateString();
+        foreach ($applications as $application) {
+            if ($dateOnly > $application->follow_up_at) {
+                $application->follow_up_at = null;
+                $application->reminder_sent = false;
+            }
+            $application->save();
+        };
+
         return Inertia::render('Applications/Index', [
             'applications' => $applications,
             'filters' => $request->only(['search', 'status', 'sort', 'direction']) // Pass filters back to keep UI state
