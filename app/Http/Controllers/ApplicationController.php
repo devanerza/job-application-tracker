@@ -132,9 +132,10 @@ class ApplicationController extends Controller
         ]);
 
         $followUpAt = Carbon::parse($validated['follow_up_at']);
-        $present = Carbon::parse($application->applied_at);
+        $present = Carbon::now();
+        $dateOnly = $present->toDateString();
 
-        if ($followUpAt < $present) {
+        if ($followUpAt < $dateOnly) {
             throw ValidationException::withMessages([
                 'invalid_follow_up_date' => 'follow up must be in the future!'
             ])->errorBag("application_{$application->id}");
