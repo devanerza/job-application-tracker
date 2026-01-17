@@ -20,7 +20,7 @@ class Application extends Model
     ];
 
     #[Scope]
-    protected function filter(Builder $query, array $filters): void
+    protected function filterSort(Builder $query, array $filters): void
     {
         $query->when($filters['status'] ?? null, function ($query, $status){
             $query->where('status', $status);

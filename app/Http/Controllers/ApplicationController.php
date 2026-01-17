@@ -13,7 +13,7 @@ class ApplicationController extends Controller
     public function index(Request $request)
     {
         $applications = Application::where('user_id', auth()->id())
-        ->filter($request->all()) 
+        ->filterSort($request->all()) 
         ->paginate(10)
         ->withQueryString();
         
