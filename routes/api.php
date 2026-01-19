@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -11,20 +12,25 @@ Route::get('/test-connection', function () {
 });
 
 // Your Cron Route
-Route::get('/cron/reminders', function (Request $request) {
-    $secret = env('CRON_SECRET');
-    
-    if (!$request->has('key') || $request->query('key') !== $secret) {
-        return response()->json(['error' => 'Unauthorized'], 403);
-    }
 
-    try {
-        Artisan::call('reminders:send');
-        return response()->json([
-            'status' => 'success',
-            'output' => Artisan::output()
-        ]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
+Route::get('/cron/reminders', function () {
+    return response()->json(['message' => 'The route is definitely working!']);
 });
+
+// Route::get('/cron/reminders', function (Request $request) {
+//     $secret = env('CRON_SECRET');
+    
+//     if (!$request->has('key') || $request->query('key') !== $secret) {
+//         return response()->json(['error' => 'Unauthorized'], 403);
+//     }
+
+//     try {
+//         Artisan::call('reminders:send');
+//         return response()->json([
+//             'status' => 'success',
+//             'output' => Artisan::output()
+//         ]);
+//     } catch (\Exception $e) {
+//         return response()->json(['error' => $e->getMessage()], 500);
+//     }
+// });
