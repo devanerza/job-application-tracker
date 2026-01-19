@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
+Route::get('/test') {
+    return "API route Read successfully";
+};
 
 Route::get('/cron/reminders', function (Request $request) {
     // 1. Security Check: Compare the 'key' from the URL to your .env secret
