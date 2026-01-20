@@ -3,8 +3,15 @@
 import { router, usePage } from "@inertiajs/react"
 import { useState } from "react";
 import { format } from "date-fns";
-import { ExternalLink } from "lucide-react"
+import { ExternalLink, TrashIcon } from "lucide-react"
 import { Button } from "@/Components/ui/button"
+import { Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue, } from "@/Components/ui/select"
 import { DatePickerFoll } from "./date-picker-follUp"
 import { EditApplicationDialog } from "./dialog-edit";
 
@@ -16,7 +23,7 @@ const ActionCell = ({ application }) => {
     
 
     return (
-        <div className="flex">
+        <div className="w-21 flex justify-end">
             <EditApplicationDialog 
                 application={application} 
                 key={application.id}
@@ -30,7 +37,7 @@ const ActionCell = ({ application }) => {
                 if(confirm('Delete?')) router.delete(route('applications.destroy', application.id))
               }}
             >
-              Delete
+              <TrashIcon />
             </Button>
         </div>
     );
@@ -86,7 +93,6 @@ export const columns = [
       if (application.job_url == null) return <p className="opacity-30">No Link Provided</p>
 
       return (
-        
         <a 
           href={application.job_url} 
           target="_blank" 
@@ -109,12 +115,28 @@ export const columns = [
           status: newStatus,
         });
       };
-
+      
       return (
+        // <Select value={value} onValueChange={setValue}>
+        //   <SelectTrigger className="w-[180px]">
+        //     <SelectValue placeholder="Select Status" />
+        //   </SelectTrigger>
+        //   <SelectContent>
+        //     <SelectGroup>
+        //       <SelectLabel>Select Status</SelectLabel>
+        //       <SelectItem value="applied">Applied</SelectItem>
+        //       <SelectItem value="interviewing">Interviewing</SelectItem>
+        //       <SelectItem value="offer">Offer</SelectItem>
+        //       <SelectItem value="rejected">Rejected</SelectItem>
+        //       <SelectItem value="ghosted">Ghosted</SelectItem>
+        //     </SelectGroup>
+        //   </SelectContent>
+        // </Select>
+
         <select
           value={application.status}
           onChange={(e) => handleStatusChange(e.target.value)}
-          className="block w-full rounded-md border-gray-300 py-1 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className=" block w-full rounded-xl border-gray-300 py-1 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         >
           <option value="applied">Applied</option>
           <option value="interviewing">Interviewing</option>
@@ -125,22 +147,22 @@ export const columns = [
       );
     },
   },
-  {
-    accessorKey: "applied_at",
-    header: "Date Applied",
-  },
-  {
-    accessorKey: "follow_up_at",
-    header: "Next Follow Up",
-    cell: ({ row }) => <FollowUpCell application={row.original} />,
-  },
-  {
-    accessorKey: "last_activity_at",
-    header: "Last Activity"
-  },
+  // {
+  //   accessorKey: "applied_at",
+  //   header: "Date Applied",
+  // },
+  // {
+  //   accessorKey: "follow_up_at",
+  //   header: "Next Follow Up",
+  //   cell: ({ row }) => <FollowUpCell application={row.original} />,
+  // },
+  // {
+  //   accessorKey: "last_activity_at",
+  //   header: "Last Activity"
+  // },
   {
     id: "actions",
-    header: "Actions",
+    // header: "Actions",
     cell: ({ row }) => <ActionCell application={row.original} />,
   },
 ];

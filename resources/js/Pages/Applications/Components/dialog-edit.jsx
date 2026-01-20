@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
-import { Edit } from 'lucide-react';
+import { EditIcon } from 'lucide-react';
 import { DatePicker } from './date-picker-apply'
 import { Button } from '@/Components/ui/button'
 import { Label } from '@/Components/ui/label'
@@ -42,7 +42,7 @@ export function EditApplicationDialog({ application }) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" onClick={(e) => e.stopPropagation()}>
-                    <Edit />Edit
+                    <EditIcon />
                 </Button>
             </DialogTrigger>
             
