@@ -1,19 +1,75 @@
-import Dropdown from '@/Components/Dropdown';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { SearchIcon } from 'lucide-react';
+import { SearchIcon,
+    CreditCardIcon,
+    LogOutIcon,
+    SettingsIcon,
+    UserIcon,
+ } from 'lucide-react';
+import { Button } from '@/Components/ui/button';
+import { 
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger, } from '@/Components/ui/dropdown-menu';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/Components/ui/input-group';
+import { SidebarProvider } from '@/Components/ui/sidebar';
+import { AppSidebar } from '@/Pages/Applications/Components/app-sidebar';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
-
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
+        <html lang='en'>
+            <body>
+                <SidebarProvider>
+                    <AppSidebar />
+                    <main className='w-full'>
+                        <nav className="flex justify-between py-3 px-10 shadow-sm">
+                            <div>
+                                <InputGroup className="w-72 rounded-full">
+                                    <InputGroupInput placeholder="Search..." />
+                                    <InputGroupAddon>
+                                        <SearchIcon />
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            </div>
+                            <div>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className="border-none focus-visible:ring-0 rounded-full p-4">
+                                            {user.name}
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem>
+                                        <UserIcon />
+                                        Profile
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                        <CreditCardIcon />
+                                        Billing
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                        <SettingsIcon />
+                                        Settings
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem variant="destructive">
+                                        <LogOutIcon />
+                                        Log out
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        </nav>
+                        {children}
+                    </main>
+                </SidebarProvider>
+            </body>
+            {/* <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -160,9 +216,9 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
                     </div>
                 </div>
-            </nav>
+            </nav> */}
 
-            <main>{children}</main>
-        </div>
+            {/* <main>{children}</main> */}
+        </html>
     );
 }
