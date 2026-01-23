@@ -78,12 +78,22 @@ const FollowUpCell = ({ application }) => {
 export const columns = [
   {
     accessorKey: "company_name", 
-    header: "Company",
+    header: "Jobs",
+    cell: ({ row }) => {
+      const application = row.original;
+
+      return (
+        <div  className="py-3">
+          <h2 className="text-lg font-bold">{application.role_title}</h2>
+          <p className="text-sm">{application.company_name}</p>
+        </div>
+      )
+    }
   },
-  {
-    accessorKey: "role_title",
-    header: "Role",
-  },
+  // {
+  //   accessorKey: "role_title",
+  //   header: "Role",
+  // },
   {
     accessorKey: "job_url",
     header: "URL",
