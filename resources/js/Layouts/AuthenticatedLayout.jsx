@@ -26,43 +26,45 @@ export default function AuthenticatedLayout({ header, children }) {
             <body>
                 <SidebarProvider>
                     <AppSidebar />
-                    <main className='w-full bg-slate-50'>
-                        <nav className="bg-white flex justify-between py-3 px-10 shadow-sm">
-                            <div>
-                                <InputGroup className="w-72 rounded-full">
-                                    <InputGroupInput placeholder="Search..." />
-                                    <InputGroupAddon>
-                                        <SearchIcon />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                            </div>
-                            <div>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" className="border-none focus-visible:ring-0 rounded-full p-4">
-                                            {user.name}
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuItem>
-                                        <UserIcon />
-                                        Profile
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                        <CreditCardIcon />
-                                        Billing
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                        <SettingsIcon />
-                                        Settings
-                                        </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem variant="destructive">
-                                        <LogOutIcon />
-                                        Log out
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                    <main className='w-full bg-slate-50 relative'>
+                        <nav className="bg-white fixed z-20 inset-x-64 right-0 flex py-3 px-10 shadow-sm">
+                            <div className='flex justify-between w-full'>
+                                <div>
+                                    <InputGroup className="w-72 rounded-full">
+                                        <InputGroupInput placeholder="Search..." />
+                                        <InputGroupAddon>
+                                            <SearchIcon />
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </div>
+                                <div>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" className="border-none focus-visible:ring-0 rounded-full p-4">
+                                                {user.name}
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuItem>
+                                            <UserIcon />
+                                            Profile
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                            <CreditCardIcon />
+                                            Billing
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                            <SettingsIcon />
+                                            Settings
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem variant="destructive">
+                                            <LogOutIcon />
+                                            Log out
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
                             </div>
                         </nav>
                         {children}
