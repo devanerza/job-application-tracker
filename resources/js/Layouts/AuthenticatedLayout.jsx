@@ -26,8 +26,8 @@ export default function AuthenticatedLayout({ header, children }) {
             <body>
                 <SidebarProvider>
                     <AppSidebar />
-                    <main className='w-full'>
-                        <nav className="flex justify-between py-3 px-10 shadow-sm">
+                    <main className='w-full bg-slate-50'>
+                        <nav className="bg-white flex justify-between py-3 px-10 shadow-sm">
                             <div>
                                 <InputGroup className="w-72 rounded-full">
                                     <InputGroupInput placeholder="Search..." />

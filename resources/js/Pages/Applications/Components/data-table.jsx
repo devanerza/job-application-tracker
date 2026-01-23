@@ -24,7 +24,7 @@ export function DataTable({ columns, data }) {
   })
 
   return (
-    <div className="overflow-hidden rounded-md border">
+    <div className="p-3 overflow-hidden rounded-md border">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
