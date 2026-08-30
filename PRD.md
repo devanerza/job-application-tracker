@@ -95,9 +95,14 @@ Rejected
 Withdrawn
 Ghosted
 ```
-Requirement: status is not a freely editable dropdown. Transitions should represent real events in the process (e.g., moving to "Interview" should be tied to an interview being scheduled/recorded, not an arbitrary click).
+Requirement: status changes are deliberate, irreversible actions — not passive side effects of other actions, and not freely toggled back and forth.
 
-**Transition model: user-confirmed.** The system can *suggest* a status transition based on activity (e.g., logging an "Interview scheduled" activity suggests moving status to Interview), but the user must explicitly confirm the transition. Status never changes silently/automatically in the background.
+**Transition model: direct dropdown + confirmation.**
+- The user changes status via a dropdown/select showing the valid lifecycle options.
+- Selecting a new status immediately triggers a confirmation alert modal (e.g. "Move this application from Applied to Interview? This can't be undone.") before the change is committed.
+- Once confirmed, the change is treated as irreversible (moving "backward" in status, if ever needed, is a new forward action, not an undo).
+
+**Status changes as timeline milestones.** When a status change is confirmed, it is automatically added to the Activity Timeline (§4.2) as a distinct **milestone** entry — visually differentiated from regular activities that the user logs manually (e.g. "Follow-up sent," "Recruiter replied"). This keeps the timeline as the single source of truth for both what the user did (manual activities) and what officially changed (status milestones), without requiring the system to infer status from activity content.
 
 ---
 
@@ -120,6 +125,7 @@ Activity types include (not exhaustive):
 Requirements:
 - Every application has a visible, ordered timeline of its activities.
 - `last_activity_at` is derived from the most recent activity, not manually set.
+- **Milestones vs. activities:** status changes (see §4.1) are automatically logged as **milestone** entries, visually distinct from regular user-logged activities — e.g. a different marker/emphasis on the timeline. Milestones represent official state changes; activities represent things the user did or observed along the way.
 
 ---
 
@@ -353,7 +359,7 @@ To prevent scope creep into a generic productivity tool, the following will **no
 
 ## 8. Decisions Made
 
-- **Status transitions:** user-confirmed. The system may suggest a transition based on activity, but the user must confirm it — no silent automatic status changes.
+- **Status transitions:** direct dropdown + confirmation. The user changes status via a dropdown, which triggers an irreversible confirmation alert before committing. Confirmed changes are logged as milestone entries in the Activity Timeline.
 - **Follow-up windows & ghosting thresholds:** fixed placeholders for MVP; user-configurable in a later phase.
 
 ## 9. Open Questions
@@ -431,8 +437,8 @@ Use motion only where M3 recommends it for state change and hierarchy, not for d
 
 - **Cards** (`card`): used for dashboard action items, application list rows in card view, and interview records. Health color applies to a left-border accent or a small status dot — not the full card background, to keep the UI calm (see 10.1).
 - **Badges** (`badge`): used for status (neutral) and health (colored, per 10.2).
-- **Timeline:** no native daisyUI timeline component maps perfectly to M3 — build a custom vertical timeline using M3 spacing/color tokens (a divider line + dot per M3's list guidance), since the Activity Timeline (§4.2) is a core, frequently-viewed element and deserves a bespoke treatment rather than a generic list.
-- **Modals** (`modal`): used for status transition confirmation (§4.1) and follow-up actions (send/snooze/dismiss) — keep these short and single-purpose, consistent with M3 dialog guidance (one clear action, no multi-step forms inside a modal).
+- **Timeline:** no native daisyUI timeline component maps perfectly to M3 — build a custom vertical timeline using M3 spacing/color tokens (a divider line + dot per M3's list guidance), since the Activity Timeline (§4.2) is a core, frequently-viewed element and deserves a bespoke treatment rather than a generic list. Milestone entries (status changes) need a visually distinct marker compared to regular user-logged activity entries.
+- **Modals** (`modal`): triggered on dropdown selection for status changes (§4.1) and follow-up actions (send/snooze/dismiss) — keep these short and single-purpose, consistent with M3 dialog guidance (one clear action, no multi-step forms inside a modal). Status changes are irreversible once confirmed.
 - **Forms:** M3 filled or outlined text field style, applied via daisyUI `input`/`select` variants — pick one variant and use it consistently across Create Application, Interview records, and Documents.
 
 ### 10.7 Accessibility Baseline

@@ -127,7 +127,8 @@ user_id         — foreign ID, cascade delete
 type            — enum('application_submitted','email_sent','email_received',
                        'recruiter_contacted','recruiter_response','screening',
                        'interview_scheduled','interview_completed','technical_test',
-                       'offer_received','rejected','follow_up_sent','note')
+                       'offer_received','rejected','follow_up_sent','note',
+                       'status_change')
 title           — string (human-readable label, e.g., "Interview scheduled with Google")
 description     — text, nullable (optional detail)
 activity_date   — date (when it happened, user-selectable, defaults to today)
@@ -281,9 +282,9 @@ Full rewrite. Key changes:
 - `store()` — validate all fields including new ones. Set `user_id` and `last_activity_at = now()`. Log an "Application submitted" activity automatically.
 - `show($id)` — **NEW** — render Inertia `Applications/Show` detail page with activities, documents, health status.
 - `edit($id)` — return Inertia `Applications/Edit` page. Add authorization.
-- `update($id)` — validate all fields, update, set `last_activity_at = now()`. Add authorization.
+- `update($id)` — validate all fields, update, set `last_activity_at = now()`. Add authorization. If `status` changed, auto-log a **milestone** entry in the activity timeline (PRD §4.1/§4.2) — visually distinct from regular user-logged activities.
 - `destroy($id)` — delete with authorization.
-- Remove `statusUpdate()` and `followUp()` methods (replaced by Activity-based approach in Phase 2).
+- Remove `statusUpdate()` and `followUp()` methods (status changes now go through standard `update()`; follow-up logic moves to Phase 2).
 
 **Validation rules for all application fields:**
 ```php
@@ -609,32 +610,31 @@ This is the homepage. Use daisyUI `card` components with health-colored left-bor
 
 When user clicks [Follow up]:
 - Open modal to log a "follow_up_sent" activity
-- System suggests status transition if appropriate (user must confirm per PRD)
 
 When user clicks [Snooze]:
 - Set `follow_up_at` to today + 3 days (hardcoded for MVP)
 - Log a "note" activity: "Follow-up snoozed"
 
-### 2.6 Status transition confirmation modal (new)
+### 2.6 Status change confirmation modal (new)
 
 **New file:** `resources/js/Pages/Applications/Components/StatusTransitionModal.jsx` — **PROVIDED BY USER**
 
-Per PRD 4.1: "Status transitions should be user-confirmed."
+Per PRD 4.1: "Status changes are deliberate, irreversible actions."
 
-When an activity is logged that implies a status change (e.g., "Interview scheduled" implies moving to `interviewing`):
-1. System suggests the transition in a modal
-2. User confirms or declines
-3. If confirmed, status is updated + activity logged
-4. If declined, activity is still logged but status stays
+When the user selects a new status from the dropdown on the application form:
+1. A confirmation alert modal appears (e.g. "Move this application from Applied to Interview? This can't be undone.")
+2. If confirmed, the status update is committed — treated as irreversible (moving "backward" is a new forward action, not an undo)
+3. If cancelled, the status reverts to its previous value
+4. The confirmed status change is automatically logged as a **milestone** entry in the Activity Timeline (§4.2) — visually distinct from regular user-logged activities
 
 ### 2.7 Update routes for Phase 2
 
 ```php
 Route::patch('/applications/{application}/snooze', [ApplicationController::class, 'snooze'])
     ->name('applications.snooze');
-Route::patch('/applications/{application}/status', [ApplicationController::class, 'updateStatus'])
-    ->name('applications.status');
 ```
+
+Note: status changes go through the standard `PATCH /applications/{application}` update route — no separate status route needed.
 
 ### 2.8 Auto-expire follow-ups
 
@@ -718,7 +718,7 @@ Redesign with application context, not just a generic reminder.
 // Runs daily via scheduler
 // For each active application:
 //   Run EvaluateGhostingStatus
-//   If ghosted: suggest status transition (queue notification, don't auto-change)
+//   If ghosted: notify user that application may be ghosted (prompt to update status via dropdown)
 ```
 
 ---
@@ -800,7 +800,6 @@ class InterviewController extends Controller
 {
     // store() — create interview for an application
     //   - Automatically log "Interview scheduled" activity
-    //   - Suggest status transition to 'interviewing' (user confirms)
     // update() — edit interview details
     // destroy() — delete interview
 }
