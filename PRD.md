@@ -374,7 +374,7 @@ To prevent scope creep into a generic productivity tool, the following will **no
 ## 9. Tech Stack
 
 - **Backend:** Laravel, Eloquent ORM, Laravel Breeze (authentication), MySQL
-- **Domain logic:** kept lean — plain Action classes (e.g. `DetermineNextAction`, `EvaluateGhostingStatus`) invoked directly from controllers, rather than a heavy service/repository layer. Laravel's built-in scheduler/jobs/notifications are used for automation (Phase 3) rather than additional packages.
+- **Domain logic:** kept lean — business logic lives in `app/Services/` (e.g. `AnalyticsService`, follow-up/health calculation logic) and `app/Actions/` (single-purpose operations like `DetermineNextAction`, `EvaluateGhostingStatus`). Controllers stay thin — they handle HTTP concerns only (validation, auth, delegation to services/actions). Laravel's built-in scheduler/jobs/notifications are used for automation (Phase 3) rather than additional packages.
 - **Frontend:** Inertia.js + React
 - **UI components:** daisyUI (Tailwind-based), chosen over shadcn/Radix for simplicity — this app's UI is mostly cards, badges, timelines, and forms, which daisyUI covers directly with less code to own/maintain. A raw Radix primitive may be dropped in later for the rare case that needs it (e.g. a company/location combobox), but daisyUI end-to-end is the default for MVP.
 

@@ -6,6 +6,8 @@ This document defines the complete rebuild of the Job Application Tracker ("Stri
 
 **UI Workflow:** All `.jsx` frontend UI files (pages, components, layouts) will be **provided by the user (Devan)**. The agent's role is to **integrate, re-touch, and adjust** these files as needed — wiring up Inertia props, fixing imports, ensuring daisyUI class usage, and connecting to backend routes/controllers. The agent should NOT write UI from scratch; instead, wait for the user to provide each `.jsx` file, then adapt it to fit the backend and data layer.
 
+**Backend architecture:** Controllers stay thin — they handle HTTP concerns only (validation, auth, delegation). Business logic lives in `app/Services/` (e.g. `AnalyticsService`, follow-up/health calculation logic) and `app/Actions/` (single-purpose operations like `DetermineNextAction`, `EvaluateGhostingStatus`). Do not put domain logic in controllers.
+
 ---
 
 ## Table of Contents
