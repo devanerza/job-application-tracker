@@ -22,7 +22,7 @@ class ApplicationFactory extends Factory
             'company_name' => $this->faker->company(),
             'role_title' => $this->faker->jobTitle(),
             'job_url' => $this->faker->optional()->url(),
-            'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
+            'status' => $this->faker->randomElement(['applied', 'screening', 'interviewing', 'offer', 'rejected', 'ghosted']),
             'applied_at' => $this->faker->date(),
             'last_activity_at' => $this->faker->date(),
             'follow_up_at' => $this->faker->optional()->date(),

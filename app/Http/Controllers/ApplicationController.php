@@ -13,7 +13,7 @@ class ApplicationController extends Controller
     public function index(Request $request)
     {
         $applications = Application::where('user_id', auth()->id())
-        ->filterSort($request->all()) 
+        ->orderBy('last_activity_at', 'desc')
         ->paginate(10)
         ->withQueryString();
 
@@ -35,13 +35,20 @@ class ApplicationController extends Controller
 
     public function create()
     {
-        return view('applications.create'); //CHANGE TO INERTIA
+        return Inertia::render('Applications/Create');
     }
 
     public function edit($id)
     {
         $application = Application::findOrFail($id);
-        return view('applications.edit', compact('application'));
+
+        if ($application->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return Inertia::render('Applications/Edit', [
+            'application' => $application,
+        ]);
     }
 
     public function store(Request $request)
@@ -91,9 +98,10 @@ class ApplicationController extends Controller
             'job_url.active_url' => 'invalid or inactive URL'
         ]);
 
-        $application->update($validated);
-        $application->last_activity_at = $validated['applied_at'];
-        $application->save();
+        $application->update([
+            ...$validated,
+            'last_activity_at' => now(),
+        ]);
 
         return redirect()->route('applications.index')->with('success', 'Application updated successfully.');
     }
@@ -150,8 +158,6 @@ class ApplicationController extends Controller
         
 
         $application->save();
-
-        // dd($application->status);
 
         return redirect()->route('applications.index')->with('success', 'Application follow up updated successfully.');
     }

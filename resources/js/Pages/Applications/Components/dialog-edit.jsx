@@ -25,8 +25,6 @@ export function EditApplicationDialog({ application }) {
         status: application?.status || 'applied',
     });
 
-    console.log(data);
-
     // Form submission handler
     const handleSubmit = (e) => {
         e.preventDefault();
